@@ -46,6 +46,32 @@ namespace WebAPI.Controllers
             return new JsonResult(table);
         }
 
+        //GET values from only one item in the table
+        [HttpGet("{id}")]
+        public JsonResult Get(int id)
+        {
+
+            string query = @"
+                    select spId, spNameModel, spNameBland, spPrice from model where spId = " + id;
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("ConexionBD");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader); ;
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
 
     }
 }
