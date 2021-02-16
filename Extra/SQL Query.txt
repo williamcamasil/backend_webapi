@@ -1,0 +1,1 @@
+create database smartphoneuse smartphonecreate table model(	spId int identity(1,1),	spNameModel varchar(500),	spNameBland varchar(500),	spPrice float,)select * from modelinsert into model values (	'Iphone XR', 'Apple', 2200.00)insert into model values (	'Galaxy S10', 'Samsung', 1650.99)
