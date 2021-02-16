@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
@@ -71,6 +72,40 @@ namespace WebAPI.Controllers
 
             return new JsonResult(table);
         }
+
+        //sp = SmartPhone
+        [HttpPost]
+        public JsonResult Post(Model sp)
+        {
+            string query = @"
+                    insert into model 
+                    (spNameBland,spNameModel,spPrice)
+                    values 
+                    (
+                        '" + sp.spNameBland + @"'
+                        ,'" + sp.spNameModel + @"'
+                        ,'" + sp.spPrice + @"'
+
+                    )";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("ConexionBD");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader); ;
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Added Successfully");
+        }
+
 
 
     }
